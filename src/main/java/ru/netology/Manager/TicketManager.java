@@ -1,9 +1,11 @@
 package ru.netology.Manager;
 
+import ru.netology.Comparator.TicketByTimeComparator;
 import ru.netology.Repository.TicketRepository;
 import ru.netology.domain.Ticket;
 
 import java.util.Arrays;
+import java.util.Comparator;
 
 public class TicketManager {
     public TicketRepository repo = new TicketRepository();
@@ -53,6 +55,20 @@ public class TicketManager {
             result = temp.findAll();
         }
         Arrays.sort(result);
+        return result;
+    }
+
+    public Ticket[] searchByTime(String from, String to, Comparator<Ticket> comparator) {
+        TicketByTimeComparator timeComparator = new TicketByTimeComparator();
+        Ticket[] result = new Ticket[0];
+        TicketRepository temp = new TicketRepository();
+        for (Ticket ticket : repo.findAll()) {
+            if (matches(ticket, from, to)) {
+                temp.save(ticket);
+            }
+            result = temp.findAll();
+        }
+        Arrays.sort(result, timeComparator);
         return result;
     }
 
